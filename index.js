@@ -32,11 +32,11 @@ client.on('message', async message => {
                 if (!crashing) {
                     crashing = true;
                     message.channel.send("crashing in 3")
-                    await delay(1000);
+                    await delay2(1000);
                     message.channel.send("crashing in 2")
-                    await delay(1000);
+                    await delay2(1000);
                     message.channel.send("crashing in 1")
-                    await delay(1000);
+                    await delay2(1000);
                     message.channel.send("crashed")
                     crash;
                 }
@@ -50,10 +50,9 @@ client.on('message', async message => {
     }
 });
 client.login(config.token);
-/*setInterval(input, 1000)
 
-async function input() {
-    if (await io.read() === "crash") {
-        crash;
-    }
-}*/
+async function delay2(millis) {
+    new Promise((resolve, reject) => {
+        setTimeout(_ => resolve(), millis)
+    });
+}
