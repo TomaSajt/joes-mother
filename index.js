@@ -31,7 +31,7 @@ client.on('message', async message => {
                 message.channel.send("crashing in 3")
                 setTimeout(() => { }, 1000);
                 message.channel.send("crashing in 2")
-                setTimeout(() => { }r, 1000);
+                setTimeout(() => { }, 1000);
                 message.channel.send("crashing in 1")
                 setTimeout(() => { }, 1000);
                 message.channel.send("crashed")
