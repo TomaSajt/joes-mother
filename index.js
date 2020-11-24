@@ -37,10 +37,10 @@ client.on('message', async message => {
     }
 });
 client.login(config.token);
-setInterval(input, 1000)
+/*setInterval(input, 1000)
 
 async function input() {
     if (await io.read() === "crash") {
         crash;
     }
-}
+}*/
