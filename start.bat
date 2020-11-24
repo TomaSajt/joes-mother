@@ -1,4 +1,4 @@
 :a
 node index.js
-pause
+timeout 1
 goto :a
