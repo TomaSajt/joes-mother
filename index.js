@@ -50,10 +50,10 @@ client.login(config.token);
 
 async function delay(millis) {
     return new Promise((resolve) => {
-        setTimeout(() => resolve(), millis)
+        setTimeout(() => resolve(0), millis)
     });
 }
 function randomPicture() {
-    var pictures = ["https://i.imgur.com/Fl4DpvB.jpg","https://i.imgur.com/NEZEOhS.gif", "https://i.imgur.com/6iueg8x.png"]
-    return pictures[Math.floor(Math.random * pictures.length)]
+    var pictures = ["https://i.imgur.com/Fl4DpvB.jpg", "https://i.imgur.com/NEZEOhS.gif", "https://i.imgur.com/6iueg8x.png"]
+    return pictures[Math.floor(Math.random() * pictures.length)]
 }
