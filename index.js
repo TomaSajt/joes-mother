@@ -16,7 +16,7 @@ client.on('message', async message => {
         message.react("<:RuviPog:777804089290784808>")
     }
     if (message.content.toLowerCase().includes("joe mama")) {
-        message.channel.send(`> You are almost as funny as me ${message.author}`, { files: ["https://i.imgur.com/NEZEOhS.gif"] })
+        message.channel.send(`> You are almost as funny as me ${message.author}`, { files: [randomPicture()] })
     }
     if (message.content.toLowerCase().includes("joe") && (message.content.toLowerCase().includes("who's") || message.content.toLowerCase().includes("who is") || message.content.toLowerCase().includes("whos") || message.content.toLowerCase().includes("who s"))) {
         message.channel.send("joe mama")
@@ -52,4 +52,8 @@ async function delay(millis) {
     return new Promise((resolve) => {
         setTimeout(() => resolve(), millis)
     });
+}
+function randomPicture() {
+    var pictures = ["https://i.imgur.com/Fl4DpvB.jpg","https://i.imgur.com/NEZEOhS.gif", "https://i.imgur.com/6iueg8x.png"]
+    return pictures[Math.floor(Math.random * pictures.length)]
 }
