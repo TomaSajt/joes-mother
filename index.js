@@ -49,9 +49,13 @@ client.on('message', async message => {
 client.login(config.token);
 
 async function delay(millis) {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(0), millis)
-    }).catch(console.log);;
+    try {
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(0), millis)
+        })
+    } catch (e) {
+        console.log(e)
+    }
 }
 function randomPicture() {
     var pictures = ["https://i.imgur.com/Fl4DpvB.jpg", "https://i.imgur.com/NEZEOhS.gif", "https://i.imgur.com/6iueg8x.png"]
