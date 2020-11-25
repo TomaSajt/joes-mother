@@ -29,23 +29,11 @@ client.on('message', async message => {
                 if (!crashing) {
                     crashing = true;
                     message.channel.send("crashing in 3")
-                    try {
-                        await delay(1000);
-                    } catch (e) {
-
-                    }
+                    await delay(1000).catch(console.log);
                     message.channel.send("crashing in 2")
-                    try {
-                        await delay(1000);
-                    } catch (e) {
-
-                    }
+                    await delay(1000).catch(console.log);
                     message.channel.send("crashing in 1")
-                    try {
-                        await delay(1000);
-                    } catch (e) {
-
-                    }
+                    await delay(1000).catch(console.log);
                     message.channel.send("crashed")
                     crash;
                 }
