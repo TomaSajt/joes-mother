@@ -31,8 +31,10 @@ client.on('message', async message => {
     if (message.content.toLowerCase().includes("joe") && (message.content.toLowerCase().includes("who's") || message.content.toLowerCase().includes("who is") || message.content.toLowerCase().includes("whos") || message.content.toLowerCase().includes("who s"))) {
         message.channel.send("joe mama")
     }
-    //const args = message.content.slice(config.prefix.length).trim().split(' ').filter(str => str != "");
-    if (message.content.toLowerCase() == "joe!crash") {
+    if (message.content.toLowerCase() == `${config.prefix}help`) {
+        message.channel.send("There is no helping you...")
+    }
+    if (message.content.toLowerCase() == `${config.prefix}crash`) {
         if (message.memsber.id == "436579592447197225") {
             crashing = true;
             message.channel.send("crashing in 3")
@@ -46,6 +48,13 @@ client.on('message', async message => {
             crash;
         } else {
             message.channel.send("only TomaSajt can do that")
+        }
+    }
+    if (message.member == message.guild.members.cache.get("780366371083124746")) {
+        if (message.content.toLowerCase().includes("i am mom")) {
+            if (Math.floor(Math.random() * 5) == 0) {
+                message.channel.send("I am the real mother not you, <@780366371083124746>")
+            }
         }
     }
 });
