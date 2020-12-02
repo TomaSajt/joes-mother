@@ -1,6 +1,7 @@
 ﻿const Discord = require('discord.js');
 const config = require('./config.json');
 var crashing = false;
+var pause = false;
 
 var client = new Discord.Client();
 client.once('ready', () => {
