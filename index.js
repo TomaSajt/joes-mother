@@ -1,5 +1,6 @@
 ﻿const Discord = require('discord.js');
 const config = require('./config.json');
+const fetch = require('node-fetch');
 var crashing = false;
 var pause = false;
 
@@ -34,6 +35,29 @@ client.on('message', async message => {
     if (message.content.toLowerCase() == `${config.prefix}help`) {
         message.channel.send("There is no helping you...")
     }
+    if (message.content.toLowerCase() == `${config.prefix}leaderboard`) {
+        fetch("https://adventofcode.com/2020/leaderboard/private/view/1022157.json", { headers: { cookie: `session=${config.aocSession}` } }).then(res => res.json())
+            .then(data => {
+                var members = [];
+                for (var key in data.members) {
+                    members.push(data.members[key])
+                }
+                members.sort((a, b) => b.local_score - a.local_score);
+                var mess = "```";
+                var longestName = 0;
+                var longestScore = 0;
+                members.forEach(mem => {
+                    if (mem.name.length > longestName) longestName = mem.name.length
+                    if (mem.local_score.toString().length > longestScore) longestScore = mem.local_score.toString().length
+                })
+                members.forEach(mem => {
+                    mess += `${mem.name}:${" ".repeat(longestName - mem.name.length)}   Score: ${mem.local_score}${" ".repeat(longestScore - mem.local_score.toString().length)}   ${mem.stars}⭐ \n`
+                })
+                mess += "```";
+                message.channel.send(mess)
+            })
+
+    }
     if (message.content.toLowerCase() == `${config.prefix}crash`) {
         if (message.memsber.id == "436579592447197225") {
             crashing = true;
@@ -50,10 +74,10 @@ client.on('message', async message => {
             message.channel.send("only TomaSajt can do that")
         }
     }
-    if (message.member == message.guild.members.cache.get("780366371083124746")) {
+    if (message.member.id == "780366371083124746") {
         if (message.content.toLowerCase().includes("i am mom")) {
             if (Math.floor(Math.random() * 5) == 0) {
-                message.channel.send("I am the real mother not you, <@780366371083124746>")
+                message.channel.send("I am the real mother, not you, <@780366371083124746>")
             }
         }
     }
