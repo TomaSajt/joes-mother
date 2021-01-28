@@ -1,4 +1,4 @@
-module.exports = (message) => {
+module.exports = message => {
     var text = message.content.toLowerCase()
     if (text.includes("joe mama")) {
         message.channel.send(`> You are almost as funny as me ${message.author}`, { files: [randomPicture()] })

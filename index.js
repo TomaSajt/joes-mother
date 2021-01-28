@@ -1,12 +1,18 @@
 ﻿const Discord = require('discord.js');
 const config = require('./config.json');
-const kareszCommand = require('./commands/karesz.js');
-const joeMamaCommand = require('./commands/joe mama.js');
-const whosJoeCommand = require('./commands/whos joe.js');
-const helpCommand = require('./commands/help.js');
-const pogCommand = require('./commands/pog.js');
 var crashing = false;
 var pause = false;
+var normalCommands = [
+    require('./commands/normal/sync/karesz.js'),
+    require('./commands/normal/sync/joe mama.js'),
+    require('./commands/normal/sync/whos joe.js'),
+    require('./commands/normal/sync/help.js'),
+    require('./commands/normal/sync/pog.js')
+]
+var normalAwaitCommands = [
+    require('./commands/normal/async/timer.js'),
+    require('./commands/normal/async/crash.js')
+]
 
 var client = new Discord.Client();
 client.once('ready', () => {
@@ -15,7 +21,7 @@ client.once('ready', () => {
 
 client.on('message', async message => {
     var text = message.content.toLowerCase()
-    if (message.author.bot || crashing) return;
+    if (message.author.bot) return;
     if (text == `${config.prefix}unpause`) {
         pause = false;
         message.channel.send("Unpaused instance this instance of the bot")
@@ -25,59 +31,8 @@ client.on('message', async message => {
         pause = true;
         message.channel.send("Paused instance this instance of the bot")
     }
-    kareszCommand(message)
-    pogCommand(message)
-    joeMamaCommand(message);
-    whosJoeCommand(message);
-    helpCommand(message);
-    if (text.startsWith(`${config.prefix}timer`)) {
-        var args = message.content.substring(`${config.prefix}timer`.length).trim().split().filter(str => str != "");
-        var num = parseInt(args[0])
-        if (!isNaN(num)) {
-            if (num >= 0) {
-                if (num <= 300) {
-                    try {
-                        var mes = await message.channel.send(num)
-                        for (var i = num - 1; i >= 0; i--) {
-                            await delay(1000)
-                            if (i%5==0 || i<5) {
-                                mes.edit(i);
-                            }
-                        }
-                    } catch (e) {
-                        message.channel.send("an exeption happened, idk what tho")
-                    }
-                } else {
-                    message.channel.send("The longest wait time is 5 min (300 sec)");
-                }
-            } else {
-                message.channel.send("Your number is lower than your IQ, which is invalid");
-            }
-        } else {
-            message.channel.send("This number is invalid")
-        }
-    }
-    if (message.content.toLowerCase() == `${config.prefix}crash`) {
-        if (message.member.id == config.members.toma) {
-            crashing = true;
-            message.channel.send("crashing in 3")
-            await delay(1000)
-            message.channel.send("crashing in 2")
-            await delay(1000)
-            message.channel.send("crashing in 1")
-            await delay(1000)
-            message.channel.send("crashed")
-            await delay(100)
-            crash;
-        } else {
-            message.channel.send("only TomaSajt can do that")
-        }
-    }
+    normalCommands.forEach(comm => comm(message))
+    normalAwaitCommands.forEach(async awComm => await awComm(message))
+    
 });
 client.login(config.token);
-
-async function delay(millis) {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(0), millis)
-    })
-}
