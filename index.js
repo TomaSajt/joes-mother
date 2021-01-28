@@ -1,24 +1,22 @@
 ﻿const Discord = require('discord.js');
 const config = require('./config.json');
-var crashing = false;
 const pauseUnpauseCommand = require('./commands/special/sync/pause unpause.js');
-var normalCommands = [
+const normalCommands = [
     require('./commands/normal/sync/karesz.js'),
     require('./commands/normal/sync/joe mama.js'),
     require('./commands/normal/sync/whos joe.js'),
     require('./commands/normal/sync/help.js'),
     require('./commands/normal/sync/pog.js')
 ]
-var normalAwaitCommands = [
+const normalAwaitCommands = [
     require('./commands/normal/async/timer.js'),
     require('./commands/normal/async/crash.js')
 ]
-
-var client = new Discord.Client();
+const client = new Discord.Client();
 client.once('ready', () => {
     console.log('Restarted');
+    
 });
-
 client.on('message', async message => {
     if (message.author.bot) return;
     if (pauseUnpauseCommand(message)) return;
@@ -26,4 +24,68 @@ client.on('message', async message => {
     normalAwaitCommands.forEach(async awComm => await awComm(message))
     
 });
+client.ws.on('INTERACTION_CREATE', async interaction => {
+    //console.log(interaction)
+    //console.log(interaction.data.options)
+    if (interaction.data.name == "tag") {
+        client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+                type: 4,
+                data: {
+                    content: `<@${interaction.data.options[0].value}>`
+                }
+            }
+        })
+    }
+    if (interaction.data.name == "remote") {
+        var guild = client.guilds.cache.get(config.guilds.nyf)
+        var channel = guild.channels.cache.get(interaction.data.options[0].value);
+        if (channel instanceof Discord.TextChannel) {
+            channel.send(interaction.data.options[1].value)
+        }
+        client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+                type: 2
+            }
+        })
+    }
+    
+})
 client.login(config.token);
+client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.post({
+    data: {
+        name: 'tag',
+        description: 'pings a person',
+        options: [
+            {
+                "name": "member",
+                "description": "Who to @",
+                "type": 6,
+                "required": true
+            }
+        ]
+    }
+})
+client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.post({
+    data: {
+        name: 'remote',
+        description: 'pings a person',
+        options: [
+            {
+                "name": "channel",
+                "description": "Channel to send message to",
+                "type": 7,
+                "required": true
+            },
+            {
+                "name": "message",
+                "description": "The message to send",
+                "type": 3,
+                "required": true
+            }
+        ]
+    }
+})
+
+client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.get().then(a => console.log(a))
+
