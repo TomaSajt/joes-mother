@@ -39,14 +39,15 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
     }
     if (interaction.data.name == "remote") {
         var guild = client.guilds.cache.get(interaction.guild_id)
-        var channel = guild.channels.cache.get(interaction.data.options[0].value);
+        var channelToSend = guild.channels.cache.get(interaction.data.options[0].value);
+        var channelSentIn = guild.channels.cache.get(interaction.channel_id);
         if (interaction.member.roles.includes(config.roles.remote)) {
-            if (channel instanceof Discord.TextChannel) {
-                channel.send(interaction.data.options[1].value)
+            if (channelToSend instanceof Discord.TextChannel) {
+                channelToSend.send(interaction.data.options[1].value)
             }
         } else {
-            if (channel instanceof Discord.TextChannel) {
-                channel.send("You dont have the permissions to do that")
+            if (channelSentIn instanceof Discord.TextChannel) {
+                channelSentIn.send("You dont have the permissions to do that")
             }
         }
         client.api.interactions(interaction.id, interaction.token).callback.post({
