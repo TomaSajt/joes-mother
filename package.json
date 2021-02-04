@@ -12,6 +12,7 @@
     "discord.js": "^12.5.0",
     "fetch": "^1.1.0",
     "fs": "^0.0.1-security",
+    "gtts": "^0.2.1",
     "node-fetch": "^2.6.1",
     "requests": "^0.3.0",
     "text-to-mp3": "^1.0.4"

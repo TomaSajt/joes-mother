@@ -19,7 +19,7 @@ const normalSlashCommands = [
     require('./slash_commands/remote.js'),
 ]
 const asyncSlashCommands = [
-    require('./slash_commands/indian.js')
+    require('./slash_commands/tts.js')
 ]
 const client = new Discord.Client();
 client.once('ready', () => {
