@@ -56,7 +56,7 @@ module.exports = async (message, client) => {
         if (text.startsWith(`${config.prefix}gbruh`)) {
             if (message.member.id == config.members.toma) {
                 var args = message.content.substring(`${config.prefix}gbruh`.length).trim().split().filter(str => str != "");
-                var json = await search(args, 10)
+                var json = await search(args, 3)
                 if (json instanceof Array) {
                     var urls = json.map(entry => entry.file_url)
                     message.channel.send(urls.reduce((allRows, nextRow) => allRows+"\n"+nextRow))
