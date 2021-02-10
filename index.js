@@ -8,7 +8,8 @@ const normalCommands = [
     require('./commands/normal/sync/whos joe.js'),
     require('./commands/normal/sync/help.js'),
     require('./commands/normal/sync/pog.js'),
-    require('./commands/normal/sync/shuffle.js')
+    require('./commands/normal/sync/shuffle.js'),
+    require('./commands/normal/sync/eval.js')
 ]
 const normalAsyncCommands = [
     require('./commands/normal/async/timer.js'),
@@ -34,14 +35,14 @@ client.on('message', async message => {
 
     //Pause logic
     if (message.author.bot) return;
-    pauseUnpauseCommand(message);
+    pauseUnpauseCommand(message, client);
     if (isPaused()) return;
 
     //Handle commands
-    normalCommands.forEach(comm => comm(message))
+    normalCommands.forEach(comm => comm(message, client))
 
     //Handle async commands
-    normalAsyncCommands.forEach(async awComm => await awComm(message))
+    normalAsyncCommands.forEach(async awComm => await awComm(message, client))
 });
 //Handle interactions
 client.ws.on('INTERACTION_CREATE', async interaction => {
@@ -59,8 +60,10 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
 client.login(config.token);
 
 //Define or redefine slash commands
-//normalSlashCommands.forEach(slashComm => client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.post(slashComm.definition))
-//asyncSlashCommands.forEach(slashComm => client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.post(slashComm.definition))
+//Comment out if there isn't change
+
+normalSlashCommands.forEach(slashComm => client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.post(slashComm.definition))
+asyncSlashCommands.forEach(slashComm => client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.post(slashComm.definition))
 
 //Log all commands
 client.api.applications(config.app_id).guilds(config.guilds.nyf).commands.get().then(a => console.log(stringify(a)))
