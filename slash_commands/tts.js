@@ -95,27 +95,14 @@ module.exports.action = async (interaction, client) => {
         var guild = client.guilds.cache.get(interaction.guild_id)
         var channel = guild.channels.cache.get(interaction.channel_id)
         if (channel instanceof Discord.TextChannel) {
-            if (interaction.data.options[0].name == 'gtts') {
-                var gtts = new gTTS(interaction.data.options[0].options[0].value, interaction.data.options[0].options[1].value);
-                await gtts.save(filename, function (err, result) {
-                    if (err) { throw new Error(err); }
-                    console.log("Text to speech converted!");
-                    channel.send({
-                        files: [filename]
-                    })
-                });
-            } else if (interaction.data.options[0].name == 'legacy') {
-                txtomp3.getMp3(interaction.data.options[0].options[0].value).then(stream => {
-                    var file = fs.createWriteStream(filename);
-                    file.write(stream);
-                    file.end();
-                    file.on("close", async () => {
-                        await channel.send({
-                            files: [filename]
-                        })
-                    })
-                }).catch(e => console.log("Error", e));
-            }
+            var gtts = new gTTS(interaction.data.options[0].value, interaction.data.options[1].value);
+            await gtts.save(filename, function (err, result) {
+                if (err) { throw new Error(err); }
+                console.log("Text to speech converted!");
+                channel.send({
+                    files: [filename]
+                })
+            });
         }
         client.api.interactions(interaction.id, interaction.token).callback.post({
             data: {
