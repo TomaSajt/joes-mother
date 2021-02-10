@@ -2,6 +2,7 @@ const config = require('../../../config.json');
 const { Message, Client } = require('discord.js');
 module.exports = (message, client) => {
     if (message instanceof Message) {
+        message.channel.awaitMessages(msg => true, { max: 1, time: 10000, errors: ['time'] }).then(msgs => msgs.first()).then(msg => msg.delete()).catch(e => message.channel.send('You did not send a message in time'))
         console.log('asd')
         message.ed
         var text = message.content.toLowerCase()
@@ -42,4 +43,8 @@ function repeat(func, period, times, start, end) {
             }
         }
     }, period);
+}
+
+function deleteNextMessage(channel, timeout) {
+    channel.awaitMessages(msg => true, { max: 1, time: timeout, errors: ['time'] }).then(msgs => msgs.first()).then(msg => msg.delete()).catch(e => channel.send('Delete timed out'))
 }
