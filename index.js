@@ -15,7 +15,8 @@ const normalAsyncCommands = [
     require('./commands/normal/async/timer.js'),
     require('./commands/normal/async/crash.js'),
     require('./commands/normal/async/guess.js'),
-    require('./commands/normal/async/gbruh.js')
+    require('./commands/normal/async/gbruh.js'),
+    require('./commands/normal/async/play.js')
 ]
 const normalSlashCommands = [
     require('./slash_commands/tag.js'),

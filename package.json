@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.4.0",
     "async-eval": "^0.1.5",
     "discord.js": "^12.5.0",
     "fetch": "^1.1.0",
@@ -16,6 +17,7 @@
     "gtts": "^0.2.1",
     "node-fetch": "^2.6.1",
     "requests": "^0.3.0",
-    "text-to-mp3": "^1.0.4"
+    "text-to-mp3": "^1.0.4",
+    "ytdl-core-discord": "^1.2.5"
   }
 }
