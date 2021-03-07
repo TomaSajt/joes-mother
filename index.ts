@@ -1,17 +1,29 @@
 import Discord from 'discord.js'
-import * as CommUtils from './modules/commandutils'
+import { Handler } from './modules/commandutils'
 import * as config from './config.json'
-const client = new Discord.Client({ ws: { intents: new Discord.Intents(Discord.Intents.ALL)}})
+const client = new Discord.Client({ ws: { intents: new Discord.Intents(Discord.Intents.ALL) } })
 
-client.login(config.token)
+require('dotenv').config()
 
 
 client.once('ready', () => {
-    console.log('logged in')
+    console.log('Ready')
 })
+async function createHandler() {
+    var mainHandler = new Handler({
+        client: client,
+        admins: [config.members.toma],
+        pchArgs: {
+            prefix: 'joe!',
+            commands: [
+                (await import('./prefixcommands/test_commands')).test,
+                (await import('./prefixcommands/test_commands')).ping,
+                (await import('./prefixcommands/pause_commands')).pause,
+                (await import('./prefixcommands/pause_commands')).unpause
+            ]
+        }
+    });
+}
 
-var mainHandler = new CommUtils.Handler({ client: client, prefix: 'joe!' })
-
-var asd = new CommUtils.Command({ names: ['bruh'], action: (client, message) => { message.channel.send('bruh') } });
-
-mainHandler.registerCommand(asd)
+client.login(process.env.TOKEN)
+createHandler()
