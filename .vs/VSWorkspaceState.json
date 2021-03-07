@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\modules"
+    "\\modules",
+    "\\prefixcommands"
   ],
-  "SelectedNode": "\\asd.ts",
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
