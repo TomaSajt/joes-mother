@@ -1,22 +1,6 @@
 {
-	"prefix": "joe!",
-	"roles": {
-		"remote": "804436768270188545"
-	},
-	"members": {
-		"toma": "436579592447197225"
-	},
-	"guilds": {
-		"nyf": "718399828970700910"
-	},
-	"emotes": {
-		"karesz": "<:karesz:776413600117030913>",
-		"kareszdown": "<:kareszdown:804369308976152586>",
-		"kareszup": "<:kareszup:804369309237116969>",
-		"kareszleft": "<:kareszleft:804369309195173989>",
-		"kareszright": "<:kareszright:804369309194780703>",
-		"ruvipog": "<:RuviPog:777804089290784808>"
-	},
-	"app_id": "777905452084101121",
-	"token": "Nzc3OTA1NDUyMDg0MTAxMTIx.X7KO6A._KNNipAYsKzilxp2u1d5mwmUnpo"
+  "token":  "Nzc3OTA1NDUyMDg0MTAxMTIx.X7KO6A._KNNipAYsKzilxp2u1d5mwmUnpo",
+  "members": {
+    "toma": "436579592447197225"
+  }
 }
