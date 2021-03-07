@@ -4,8 +4,9 @@
     "\\commands",
     "\\commands\\includes",
     "\\commands\\prefix",
+    "\\commands\\slash",
     "\\modules"
   ],
-  "SelectedNode": "\\index.ts",
+  "SelectedNode": "\\commands\\slash\\tts.ts",
   "PreviewInSolutionExplorer": false
 }

@@ -1,10 +1,12 @@
-import Discord, { EmojiIdentifierResolvable } from 'discord.js'
+import Discord, { TextChannel } from 'discord.js'
+import * as config from '../config.json'
 
-type HandlerArgs = {
+type ComplexHandlerArgs = {
     client: Discord.Client,
     admins?: string[],
-    pchArgs: PrefixCommandHandlerArgs
-    ichArgs: IncludesCommandHandlerArgs
+    prefixCommandHandlerArgs: PrefixCommandHandlerArgs
+    includesCommandHandlerArgs: IncludesCommandHandlerArgs
+    slashCommandHandlerArgs: SlashCommandHandlerArgs
 }
 type PrefixCommandHandlerArgs = {
     prefix: string,
@@ -13,6 +15,9 @@ type PrefixCommandHandlerArgs = {
 type IncludesCommandHandlerArgs = {
     commands: IncludesCommand[]
 }
+type SlashCommandHandlerArgs = {
+    commands: SlashCommand[]
+}
 
 type CommandArgs = {
     adminOnly?: boolean,
@@ -20,33 +25,46 @@ type CommandArgs = {
     botExecutable?: boolean
 }
 
-type PrefixCommandArgs = CommandArgs & {
+type PrefixCommandArgs = {
+    adminOnly?: boolean,
+    bypassPause?: boolean,
+    botExecutable?: boolean,
     names: string[],
     action: (client: Discord.Client, message: Discord.Message, prefixCommandHandler: PrefixCommandHandler) => void
 }
-type IncludesCommandArgs = CommandArgs & {
+type IncludesCommandArgs = {
+    adminOnly?: boolean,
+    bypassPause?: boolean,
+    botExecutable?: boolean,
     names: string[],
-    action: (client: Discord.Client, message: Discord.Message, prefixCommandHandler: IncludesCommandHandler) => void
+    action: (client: Discord.Client, message: Discord.Message, includesCommandHandler: IncludesCommandHandler) => void
 }
-
 type ReactCommandArgs = {
     names: string[],
-    emoji: EmojiIdentifierResolvable
+    emoji: Discord.EmojiIdentifierResolvable
+}
+type SlashCommandArgs = {
+    adminOnly?: boolean,
+    bypassPause?: boolean,
+    definition: any,
+    action: (client: Discord.Client, interaction: any, prefixCommandHandler: SlashCommandHandler) => void
 }
 
-export class Handler {
+export class ComplexHandler {
     readonly client: Discord.Client
     readonly prefixHandler: PrefixCommandHandler
     readonly includesHandler: IncludesCommandHandler
+    readonly slashHandler: SlashCommandHandler
     readonly admins: string[]
 
     public paused: boolean = false
 
-    constructor(args: HandlerArgs) {
+    constructor(args: ComplexHandlerArgs) {
         this.client = args.client
         this.admins = args.admins ?? []
-        this.prefixHandler = new PrefixCommandHandler(args.client, this, args.pchArgs)
-        this.includesHandler = new IncludesCommandHandler(args.client, this, args.ichArgs)
+        this.prefixHandler = new PrefixCommandHandler(args.client, this, args.prefixCommandHandlerArgs)
+        this.includesHandler = new IncludesCommandHandler(args.client, this, args.includesCommandHandlerArgs)
+        this.slashHandler = new SlashCommandHandler(args.client, this, args.slashCommandHandlerArgs)
     }
 
 }
@@ -55,9 +73,9 @@ export class PrefixCommandHandler {
     private commands: PrefixCommand[]
     private client: Discord.Client
     readonly prefix: string
-    readonly handler: Handler
+    readonly handler: ComplexHandler
 
-    constructor(client: Discord.Client, handler: Handler, args: PrefixCommandHandlerArgs) {
+    constructor(client: Discord.Client, handler: ComplexHandler, args: PrefixCommandHandlerArgs) {
         this.client = client
         this.handler = handler
         this.prefix = args.prefix
@@ -93,9 +111,9 @@ export class PrefixCommandHandler {
 export class IncludesCommandHandler {
     private commands: IncludesCommand[]
     private client: Discord.Client
-    readonly handler: Handler
+    readonly handler: ComplexHandler
 
-    constructor(client: Discord.Client, handler: Handler, args: IncludesCommandHandlerArgs) {
+    constructor(client: Discord.Client, handler: ComplexHandler, args: IncludesCommandHandlerArgs) {
         this.client = client
         this.handler = handler
         this.commands = args.commands
@@ -123,6 +141,60 @@ export class IncludesCommandHandler {
         })
     }
 }
+
+export class SlashCommandHandler {
+    private commands: SlashCommand[]
+    private client: Discord.Client
+    readonly handler: ComplexHandler
+
+    constructor(client: Discord.Client, handler: ComplexHandler, args: SlashCommandHandlerArgs) {
+        this.client = client
+        this.handler = handler
+        this.commands = args.commands
+
+        //@ts-ignore
+        this.commands.forEach(cmd => client.api.applications(client.user?.id).guilds(config.guilds.nyf).commands.post(cmd.definition))
+        //@ts-ignore
+        client.ws.on('INTERACTION_CREATE', interaction => {
+            this.handleInteraction(interaction);
+        })
+    }
+    private handleInteraction(interaction: any) {
+        console.log(interaction)
+        this.commands.forEach(cmd => {
+            var flag1 = interaction.data.name == cmd.definition.data.name
+
+            var flag2 = !cmd.adminOnly || this.handler.admins.includes(interaction.member.user.id)
+
+            var flag3 = !this.handler.paused || cmd.bypassPause
+
+
+            if (flag1 && flag2 && flag3) {
+                cmd.action(this.client, interaction, this)
+            }
+            if (flag3 && !flag2) {
+                var guild = this.client.guilds.cache.get(interaction.guild_id)!
+                var channelSentIn = guild.channels.cache.get(interaction.channel_id)!
+                if (channelSentIn instanceof Discord.TextChannel) {
+                    channelSentIn.send("Insufficient permissions.")
+                }
+            }
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 export interface Command {
     adminOnly: boolean
     bypassPause: boolean
@@ -148,7 +220,7 @@ export class PrefixCommand implements Command {
 
 export class IncludesCommand implements Command {
     readonly names: string[]
-    readonly action: (client: Discord.Client, message: Discord.Message, prefixCommandHandler: IncludesCommandHandler) => void
+    readonly action: (client: Discord.Client, message: Discord.Message, includesCommandHandler: IncludesCommandHandler) => void
     adminOnly: boolean
     bypassPause: boolean
     botExecutable: boolean
@@ -172,5 +244,21 @@ export class ReactCommand extends IncludesCommand {
             },
             botExecutable: true
         })
+    }
+}
+
+export class SlashCommand implements Command {
+    readonly action: (client: Discord.Client, message: Discord.Message, slashCommandHandler: SlashCommandHandler) => void
+    readonly definition: any
+    adminOnly: boolean
+    bypassPause: boolean
+    botExecutable: boolean
+
+    constructor(args: SlashCommandArgs) {
+        this.adminOnly = args.adminOnly ?? false;
+        this.bypassPause = args.bypassPause ?? false;
+        this.botExecutable = false
+        this.action = args.action;
+        this.definition = args.definition;
     }
 }
