@@ -2,7 +2,6 @@ import Discord from 'discord.js'
 import { ComplexHandler } from './modules/commandutils'
 import * as config from './config.json'
 const client = new Discord.Client({ ws: { intents: new Discord.Intents(Discord.Intents.ALL) } })
-
 require('dotenv').config()
 
 
@@ -10,8 +9,7 @@ client.once('ready', onReady)
 client.login(process.env.TOKEN)
 
 async function onReady() {
-    console.log('Ready')
-    console.log(client.user?.id)
+    console.log(`Logged in with user id ${client.user!.id}`)
     new ComplexHandler({
         client: client,
         admins: [config.members.toma],
@@ -26,7 +24,9 @@ async function onReady() {
         },
         includesCommandHandlerArgs: {
             commands: [
-                (await import('./commands/includes/react_commands')).pog
+                (await import('./commands/includes/includes_react_commands')).pog,
+                (await import('./commands/includes/whos_joe_mama')).whos_joe,
+                (await import('./commands/includes/whos_joe_mama')).joe_mama
             ]
         },
         slashCommandHandlerArgs: {

@@ -39,7 +39,7 @@ type IncludesCommandArgs = {
     names: string[],
     action: (client: Discord.Client, message: Discord.Message, includesCommandHandler: IncludesCommandHandler) => void
 }
-type ReactCommandArgs = {
+type IncludesReactCommandArgs = {
     names: string[],
     emoji: Discord.EmojiIdentifierResolvable
 }
@@ -124,7 +124,7 @@ export class IncludesCommandHandler {
     }
     private handleMessage(message: Discord.Message) {
         this.commands.forEach(cmd => {
-            var flag1 = cmd.names.some(name => message.content.includes(name))
+            var flag1 = cmd.names.some(name => message.content.toLowerCase().includes(name))
 
             var flag2 = !cmd.adminOnly || (message.member && this.handler.admins.includes(message.member.id))
 
@@ -235,8 +235,8 @@ export class IncludesCommand implements Command {
 }
 
 
-export class ReactCommand extends IncludesCommand {
-    constructor(args: ReactCommandArgs) {
+export class IncludesReactCommand extends IncludesCommand {
+    constructor(args: IncludesReactCommandArgs) {
         super({
             names: args.names,
             action: (client, message) => {
