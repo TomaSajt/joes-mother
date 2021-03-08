@@ -95,10 +95,8 @@ export async function getCommands(client: Client) {
 
 export async function registerCommands(client: Client, slashCommands: Iterable<SlashCommand>) {
     var commands = [...slashCommands]
-    var prevCmds = await getCommands(client)
     var postCmds = new Set<SlashCommand>(commands)
-
-    for (var prevCmd of prevCmds) {
+    for (var prevCmd of await getCommands(client)) {
         var foundCmd = commands.find(cmd => cmd.definition.name == prevCmd.name)
         if (foundCmd) {
             await patchCommand(client, foundCmd.definition, prevCmd.id)
@@ -111,4 +109,5 @@ export async function registerCommands(client: Client, slashCommands: Iterable<S
     for (var postCmd of postCmds) {
         await postCommand(client, postCmd.definition)
     }
+
 }

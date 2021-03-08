@@ -20,12 +20,18 @@ type IncludesCommandHandlerArgs = {
 type SlashCommandHandlerArgs = {
     commands: SlashCommand[]
 }
+
+type CommandArgs = {
+    adminOnly?: boolean,
+    bypassPause?: boolean,
+    botExecutable?: boolean,
+}
 type PrefixCommandArgs = {
     adminOnly?: boolean,
     bypassPause?: boolean,
     botExecutable?: boolean,
     names: string[],
-    action: (client: Discord.Client, message: Discord.Message, prefixCommandHandler: PrefixCommandHandler) => void
+    action: (args: PrefixCommandActionArgs) => void
 }
 type IncludesCommandArgs = {
     adminOnly?: boolean,
@@ -43,6 +49,12 @@ type SlashCommandArgs = {
     bypassPause?: boolean,
     definition: Definition,
     action: (client: Discord.Client, interaction: Interaction, slashCommandHandler: SlashCommandHandler) => void
+}
+type PrefixCommandActionArgs = {
+    client: Discord.Client,
+    message: Discord.Message,
+    pch: PrefixCommandHandler,
+    name: string
 }
 
 export class ComplexHandler {
@@ -85,18 +97,18 @@ export class PrefixCommandHandler {
 
     private handleMessage(message: Discord.Message) {
         this.commands.forEach(cmd => {
-            var flag1 = cmd.names.some(name => message.content.startsWith(`${this.prefix}${name}`))
+            var name = cmd.names.find(name => message.content.startsWith(`${this.prefix}${name}`))
 
-            var flag2 = !cmd.adminOnly || (message.member && this.handler.admins.includes(message.member.id))
+            var flag1 = !cmd.adminOnly || (message.member && this.handler.admins.includes(message.member.id))
 
-            var flag3 = !this.handler.paused || cmd.bypassPause
+            var flag2 = !this.handler.paused || cmd.bypassPause
 
-            var flag4 = !message.author.bot || cmd.botExecutable
+            var flag3 = !message.author.bot || cmd.botExecutable
 
-            if (flag1 && flag2 && flag3 && flag4) {
-                cmd.action(this.client, message, this)
+            if (name !== undefined && flag1 && flag2 && flag3) {
+                cmd.action({ client: this.client, message: message, pch: this, name: name })
             }
-            if (flag3 && !flag2) {
+            if (name !== undefined && flag2 && !flag1) {
                 message.channel.send("Insufficient permissions.")
             }
         })
@@ -119,18 +131,18 @@ export class IncludesCommandHandler {
     }
     private handleMessage(message: Discord.Message) {
         this.commands.forEach(cmd => {
-            var flag1 = cmd.names.some(name => message.content.toLowerCase().includes(name))
+            var name = cmd.names.find(name => message.content.toLowerCase().includes(name))
 
-            var flag2 = !cmd.adminOnly || (message.member && this.handler.admins.includes(message.member.id))
+            var flag1 = !cmd.adminOnly || (message.member && this.handler.admins.includes(message.member.id))
 
-            var flag3 = !this.handler.paused || cmd.bypassPause
+            var flag2 = !this.handler.paused || cmd.bypassPause
 
-            var flag4 = !message.author.bot || cmd.botExecutable
+            var flag3 = !message.author.bot || cmd.botExecutable
 
-            if (flag1 && flag2 && flag3 && flag4) {
+            if (name !== undefined && flag1 && flag2 && flag3) {
                 cmd.action(this.client, message, this)
             }
-            if (flag3 && !flag2) {
+            if (name !== undefined && flag2 && !flag1) {
                 message.channel.send("Insufficient permissions.")
             }
         })
@@ -187,39 +199,35 @@ export class SlashCommandHandler {
     }
 }
 
-export interface Command {
-    adminOnly: boolean
-    bypassPause: boolean
-    botExecutable: boolean
-}
 
-export class PrefixCommand implements Command {
-    readonly names: string[]
-    readonly action: (client: Discord.Client, message: Discord.Message, prefixCommandHandler: PrefixCommandHandler) => void
-    adminOnly: boolean
-    bypassPause: boolean
-    botExecutable: boolean
-
-    constructor(args: PrefixCommandArgs) {
+export abstract class Command {
+    readonly adminOnly: boolean
+    readonly bypassPause: boolean
+    readonly botExecutable: boolean
+    constructor(args: CommandArgs) {
         this.adminOnly = args.adminOnly ?? false;
         this.bypassPause = args.bypassPause ?? false;
         this.botExecutable = args.botExecutable ?? false
+    }
+}
+
+export class PrefixCommand extends Command {
+    readonly names: string[]
+    readonly action: (args: PrefixCommandActionArgs) => void
+
+    constructor(args: PrefixCommandArgs) {
+        super({ adminOnly: args.adminOnly, bypassPause: args.bypassPause, botExecutable: args.botExecutable })
         this.names = args.names;
         this.action = args.action;
     }
 }
 
-export class IncludesCommand implements Command {
+export class IncludesCommand extends Command {
     readonly names: string[]
     readonly action: (client: Discord.Client, message: Discord.Message, includesCommandHandler: IncludesCommandHandler) => void
-    adminOnly: boolean
-    bypassPause: boolean
-    botExecutable: boolean
 
     constructor(args: IncludesCommandArgs) {
-        this.adminOnly = args.adminOnly ?? false;
-        this.bypassPause = args.bypassPause ?? false;
-        this.botExecutable = args.botExecutable ?? false
+        super({ adminOnly: args.adminOnly, bypassPause: args.bypassPause, botExecutable: args.botExecutable })
         this.names = args.names;
         this.action = args.action;
     }
@@ -237,17 +245,12 @@ export class IncludesReactCommand extends IncludesCommand {
     }
 }
 
-export class SlashCommand implements Command {
+export class SlashCommand extends Command {
     readonly action: (client: Discord.Client, interaction: Interaction, slashCommandHandler: SlashCommandHandler) => void
     readonly definition: Definition
-    adminOnly: boolean
-    bypassPause: boolean
-    botExecutable: boolean
 
     constructor(args: SlashCommandArgs) {
-        this.adminOnly = args.adminOnly ?? false;
-        this.bypassPause = args.bypassPause ?? false;
-        this.botExecutable = false
+        super({ adminOnly: args.adminOnly, bypassPause: args.bypassPause, botExecutable: false })
         this.action = args.action;
         this.definition = args.definition;
     }
