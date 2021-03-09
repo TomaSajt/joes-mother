@@ -19,7 +19,8 @@ async function onReady() {
                 (await import('./commands/prefix/test_commands')).ping,
                 (await import('./commands/prefix/pause_commands')).pause,
                 (await import('./commands/prefix/pause_commands')).unpause,
-                (await import('./commands/prefix/search_commands')).gbruh
+                (await import('./commands/prefix/search_commands')).gbruh,
+                (await import('./commands/prefix/timer')).cmd
             ]
         },
         includesCommandHandlerArgs: {
