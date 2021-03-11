@@ -1,7 +1,5 @@
 import { SlashCommand } from "../../modules/commandutils";
 import Discord from 'discord.js';
-var gTTS = require('gtts')
-var filename = 'tts.mp3'
 
 export const cmd = new SlashCommand({
 

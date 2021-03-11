@@ -2,7 +2,7 @@ import Discord, { TextChannel } from 'discord.js'
 import { Interaction, Definition } from './discord_type_extension'
 import * as SlashUtils from './slash_utils'
 
-type ComplexHandlerArgs = {
+type CombinedHandlerArgs = {
     client: Discord.Client,
     admins?: string[],
     prefixCommandHandlerArgs: PrefixCommandHandlerArgs
@@ -68,7 +68,7 @@ type SlashCommandActionArgs = {
     sch: SlashCommandHandler
 }
 
-export class ComplexHandler {
+export class CombinedHandler {
     readonly client: Discord.Client
     readonly prefixHandler: PrefixCommandHandler
     readonly includesHandler: IncludesCommandHandler
@@ -77,7 +77,7 @@ export class ComplexHandler {
 
     public paused: boolean = false
 
-    constructor(args: ComplexHandlerArgs) {
+    constructor(args: CombinedHandlerArgs) {
         this.client = args.client
         this.admins = args.admins ?? []
         this.prefixHandler = new PrefixCommandHandler(args.client, this, args.prefixCommandHandlerArgs)
@@ -91,9 +91,9 @@ export class PrefixCommandHandler {
     private commands: PrefixCommand[]
     private client: Discord.Client
     readonly prefix: string
-    readonly handler: ComplexHandler
+    readonly handler: CombinedHandler
 
-    constructor(client: Discord.Client, handler: ComplexHandler, { commands, prefix }: PrefixCommandHandlerArgs) {
+    constructor(client: Discord.Client, handler: CombinedHandler, { commands, prefix }: PrefixCommandHandlerArgs) {
         this.client = client
         this.handler = handler
         this.prefix = prefix
@@ -129,9 +129,9 @@ export class PrefixCommandHandler {
 export class IncludesCommandHandler {
     private commands: IncludesCommand[]
     private client: Discord.Client
-    readonly handler: ComplexHandler
+    readonly handler: CombinedHandler
 
-    constructor(client: Discord.Client, handler: ComplexHandler, { commands }: IncludesCommandHandlerArgs) {
+    constructor(client: Discord.Client, handler: CombinedHandler, { commands }: IncludesCommandHandlerArgs) {
         this.client = client
         this.handler = handler
         this.commands = commands
@@ -163,9 +163,9 @@ export class IncludesCommandHandler {
 export class SlashCommandHandler {
     private commands: SlashCommand[]
     private client: Discord.Client
-    readonly handler: ComplexHandler
+    readonly handler: CombinedHandler
 
-    constructor(client: Discord.Client, handler: ComplexHandler, { commands }: SlashCommandHandlerArgs) {
+    constructor(client: Discord.Client, handler: CombinedHandler, { commands }: SlashCommandHandlerArgs) {
         this.client = client
         this.handler = handler
         this.commands = commands

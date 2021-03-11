@@ -1,5 +1,5 @@
 ﻿import Discord from 'discord.js'
-import { ComplexHandler } from './modules/commandutils'
+import { CombinedHandler } from './modules/commandutils'
 import * as config from './config.json'
 const client = new Discord.Client({ ws: { intents: new Discord.Intents(Discord.Intents.ALL) } })
 require('dotenv').config()
@@ -11,33 +11,18 @@ client.login(process.env.TOKEN)
 
 async function onReady() {
     console.log(`Logged in with user id ${client.user!.id}`)
-    new ComplexHandler({
-        client: client,
+    new CombinedHandler({
+        client,
         admins: [config.members.toma],
         prefixCommandHandlerArgs: {
             prefix: 'joe!',
-            commands: [
-                (await import('./commands/prefix/test_commands')).test,
-                (await import('./commands/prefix/test_commands')).ping,
-                (await import('./commands/prefix/pause_commands')).pause,
-                (await import('./commands/prefix/pause_commands')).unpause,
-                (await import('./commands/prefix/search_commands')).gbruh,
-                (await import('./commands/prefix/timer')).cmd
-            ]
+            commands: (await import('./commands/prefix')).cmds
         },
         includesCommandHandlerArgs: {
-            commands: [
-                (await import('./commands/includes/includes_react_commands')).pog,
-                (await import('./commands/includes/whos_joe_mama')).whos_joe,
-                (await import('./commands/includes/whos_joe_mama')).joe_mama
-            ]
+            commands: (await import('./commands/includes')).cmds
         },
         slashCommandHandlerArgs: {
-            commands: [
-                (await import('./commands/slash/tts')).cmd,
-                (await import('./commands/slash/remote')).cmd,
-                (await import('./commands/slash/tag')).cmd
-            ]
+            commands: (await import('./commands/slash')).cmds
         }
     });
 }
