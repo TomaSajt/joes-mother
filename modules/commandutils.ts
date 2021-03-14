@@ -54,7 +54,8 @@ type PrefixCommandActionArgs = {
     client: Discord.Client,
     message: Discord.Message,
     pch: PrefixCommandHandler,
-    name: string
+    name: string,
+    args: string[]
 }
 type IncludesCommandActionArgs = {
     client: Discord.Client,
@@ -117,7 +118,10 @@ export class PrefixCommandHandler {
             var flag3 = !message.author.bot || cmd.botExecutable
 
             if (name !== undefined && flag1 && flag2 && flag3) {
-                cmd.action({ client: this.client, message, pch: this, name: name })
+
+                var key = this.prefix + name
+                var searchArgs = message.content.substring(message.content.indexOf(key) + key.length).trim().split(' ').filter(str => str != "");
+                cmd.action({ client: this.client, message, pch: this, name: name, args: searchArgs })
             }
             if (name !== undefined && flag2 && !flag1) {
                 message.channel.send("Insufficient permissions.")

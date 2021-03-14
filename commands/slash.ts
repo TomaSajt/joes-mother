@@ -1,4 +1,5 @@
 import { TextChannel } from "discord.js";
+import { cwd } from "process";
 import { SlashCommand } from "../modules/commandutils";
 var gTTS = require('gtts')
 var filename = 'tts.mp3'
@@ -35,7 +36,7 @@ export const cmds = [
             //@ts-ignore
             client.api.interactions(interaction.id, interaction.token).callback.post({
                 data: {
-                    type: 2 //ack
+                    type: 1 //ack
                 }
             })
 
@@ -57,18 +58,80 @@ export const cmds = [
         },
         action: ({ client, interaction }) => {
             var guild = client.guilds.cache.get(interaction.guild_id!)!
-            var channel = guild.channels.cache.get(interaction.channel_id!)
+            var channel = guild.channels.cache.get(interaction.channel_id!)!
             if (channel instanceof TextChannel) {
                 channel.send(`Hello <@${interaction.data!.options![0].value}>`)
             }
             //@ts-ignore
             client.api.interactions(interaction.id, interaction.token).callback.post({
                 data: {
-                    type: 2 //ack
+                    type: 1 //ack
                 }
             })
 
         }
+        
+    }),
+    new SlashCommand({
+        adminOnly:true,
+        definition: {
+            name: 'as',
+            description: 'Sends a message in the name of a persom',
+            options: [
+                {
+                    name: "member",
+                    description: "Who to impersonate as",
+                    type: 6,
+                    required: true
+                },
+                {
+                    name: "message",
+                    description: "The message to send",
+                    type: 3,
+                    required: true
+                },
+                {
+                    name: "channel",
+                    description: "The channel to send the message in",
+                    type: 7,
+                    required: false
+                }
+            ]
+        },
+        action: ({ client, interaction }) => {
+            console.log('as command')
+            var guild = client.guilds.cache.get(interaction.guild_id!)!
+            var textChannel: TextChannel | undefined = undefined;
+            console.log('5')
+            if (interaction.channel_id) {
+                var csi = guild.channels.cache.get(interaction.channel_id);
+            }
+            console.log('4')
+            if (interaction.data?.options) {
+                var gc = guild.channels.cache.get(interaction.data.options[2].value)
+            }
+            console.log('3')
+            if (gc instanceof TextChannel) {
+                textChannel = gc;
+            } else if (csi instanceof TextChannel) {
+                textChannel = csi;
+            }
+            console.log('2')
+            if (textChannel) {
+                textChannel.send('hello')
+            } else {
+                console.log("Couldn't find text channel")
+            }
+            console.log('1')
+            //@ts-ignore
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 1 //ack
+                }
+            })
+
+        }
+        
     }),
     new SlashCommand({
 
@@ -173,7 +236,7 @@ export const cmds = [
             //@ts-ignore
             client.api.interactions(interaction.id, interaction.token).callback.post({
                 data: {
-                    type: 2 //ack
+                    type: 1 //ack
                 }
             })
 
