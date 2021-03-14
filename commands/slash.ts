@@ -33,12 +33,6 @@ export const cmds = [
             if (channelToSend instanceof TextChannel) {
                 channelToSend.send(interaction.data!.options![1].value)
             }
-            //@ts-ignore
-            client.api.interactions(interaction.id, interaction.token).callback.post({
-                data: {
-                    type: 1 //ack
-                }
-            })
 
         }
     }),
@@ -62,12 +56,6 @@ export const cmds = [
             if (channel instanceof TextChannel) {
                 channel.send(`Hello <@${interaction.data!.options![0].value}>`)
             }
-            //@ts-ignore
-            client.api.interactions(interaction.id, interaction.token).callback.post({
-                data: {
-                    type: 1 //ack
-                }
-            })
 
         }
         
@@ -123,12 +111,6 @@ export const cmds = [
                 console.log("Couldn't find text channel")
             }
             console.log('1')
-            //@ts-ignore
-            client.api.interactions(interaction.id, interaction.token).callback.post({
-                data: {
-                    type: 1 //ack
-                }
-            })
 
         }
         
@@ -233,13 +215,6 @@ export const cmds = [
                     })
                 }
             })
-            //@ts-ignore
-            client.api.interactions(interaction.id, interaction.token).callback.post({
-                data: {
-                    type: 1 //ack
-                }
-            })
-
         }
     })
 ]

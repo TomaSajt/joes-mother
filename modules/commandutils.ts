@@ -204,6 +204,12 @@ export class SlashCommandHandler {
                     //has perms?
                     if (!cmd.adminOnly || this.handler.admins.includes(interaction.member!.user.id)) {
                         cmd.action({ client: this.client, interaction, sch: this })
+                        //@ts-ignore
+                        client.api.interactions(interaction.id, interaction.token).callback.post({
+                            data: {
+                                type: 2 //ack
+                            }
+                        })
                     } else {
                         this.sendInsufftPerms(interaction)
                     }
