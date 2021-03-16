@@ -6,6 +6,57 @@ var filename = "tts.mp3";
 export const cmds = [
   new SlashCommand({
     definition: {
+      name: "bruh",
+      description: "Bruh moment",
+    },
+    action: async ({ channel }) => {
+      if (channel instanceof TextChannel) {
+        var msg = await channel.send("🗿 🗿 🗿 🗿 🗿");
+        await msg.react("🅱️");
+        await msg.react("🇷");
+        await msg.react("🇺");
+        await msg.react("🇭");
+      }
+    },
+  }),
+  new SlashCommand({
+    definition: {
+      name: "sus",
+      description: "Bruh moment",
+    },
+    action: async ({ channel }) => {
+      if (channel instanceof TextChannel) {
+        var jerma =
+          "```fix\n"+
+          "⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌\n" +
+          "⠀⠀⠀⠟⠝⠈⠀⠀⠀⠡⠀⠠⢈⠠⢐⢠⢂⢔⣐⢄⡂⢔⠀⡁⢉⠸⢨⢑⠕⡌\n" +
+          "⠀⠀⡀⠁⠀⠀⠀⡀⢂⠡⠈⡔⣕⢮⣳⢯⣿⣻⣟⣯⣯⢷⣫⣆⡂⠀⠀⢐⠑⡌\n" +
+          "⢀⠠⠐⠈⠀⢀⢂⠢⡂⠕⡁⣝⢮⣳⢽⡽⣾⣻⣿⣯⡯⣟⣞⢾⢜⢆⠀⡀⠀⠪\n" +
+          "⣬⠂⠀⠀⢀⢂⢪⠨⢂⠥⣺⡪⣗⢗⣽⢽⡯⣿⣽⣷⢿⡽⡾⡽⣝⢎⠀⠀⠀⢡\n" +
+          "⣿⠀⠀⠀⢂⠢⢂⢥⢱⡹⣪⢞⡵⣻⡪⡯⡯⣟⡾⣿⣻⡽⣯⡻⣪⠧⠑⠀⠁⢐\n" +
+          "⣿⠀⠀⠀⠢⢑⠠⠑⠕⡝⡎⡗⡝⡎⣞⢽⡹⣕⢯⢻⠹⡹⢚⠝⡷⡽⡨⠀⠀⢔\n" +
+          "⣿⡯⠀⢈⠈⢄⠂⠂⠐⠀⠌⠠⢑⠱⡱⡱⡑⢔⠁⠀⡀⠐⠐⠐⡡⡹⣪⠀⠀⢘\n" +
+          "⣿⣽⠀⡀⡊⠀⠐⠨⠈⡁⠂⢈⠠⡱⡽⣷⡑⠁⠠⠑⠀⢉⢇⣤⢘⣪⢽⠀⢌⢎\n" +
+          "⣿⢾⠀⢌⠌⠀⡁⠢⠂⠐⡀⠀⢀⢳⢽⣽⡺⣨⢄⣑⢉⢃⢭⡲⣕⡭⣹⠠⢐⢗\n" +
+          "⣿⡗⠀⠢⠡⡱⡸⣔⢵⢱⢸⠈⠀⡪⣳⣳⢹⢜⡵⣱⢱⡱⣳⡹⣵⣻⢔⢅⢬⡷\n" +
+          "⣷⡇⡂⠡⡑⢕⢕⠕⡑⠡⢂⢊⢐⢕⡝⡮⡧⡳⣝⢴⡐⣁⠃⡫⡒⣕⢏⡮⣷⡟\n" +
+          "⣷⣻⣅⠑⢌⠢⠁⢐⠠⠑⡐⠐⠌⡪⠮⡫⠪⡪⡪⣺⢸⠰⠡⠠⠐⢱⠨⡪⡪⡰\n" +
+          "⣯⢷⣟⣇⡂⡂⡌⡀⠀⠁⡂⠅⠂⠀⡑⡄⢇⠇⢝⡨⡠⡁⢐⠠⢀⢪⡐⡜⡪⡊\n" +
+          "⣿⢽⡾⢹⡄⠕⡅⢇⠂⠑⣴⡬⣬⣬⣆⢮⣦⣷⣵⣷⡗⢃⢮⠱⡸⢰⢱⢸⢨⢌\n" +
+          "⣯⢯⣟⠸⣳⡅⠜⠔⡌⡐⠈⠻⠟⣿⢿⣿⣿⠿⡻⣃⠢⣱⡳⡱⡩⢢⠣⡃⠢⠁\n" +
+          "⡯⣟⣞⡇⡿⣽⡪⡘⡰⠨⢐⢀⠢⢢⢄⢤⣰⠼⡾⢕⢕⡵⣝⠎⢌⢪⠪⡘⡌⠀\n" +
+          "⡯⣳⠯⠚⢊⠡⡂⢂⠨⠊⠔⡑⠬⡸⣘⢬⢪⣪⡺⡼⣕⢯⢞⢕⢝⠎⢻⢼⣀⠀\n" +
+          "⠁⡂⠔⡁⡢⠣⢀⠢⠀⠅⠱⡐⡱⡘⡔⡕⡕⣲⡹⣎⡮⡏⡑⢜⢼⡱⢩⣗⣯⣟\n" +
+          "⢀⢂⢑⠀⡂⡃⠅⠊⢄⢑⠠⠑⢕⢕⢝⢮⢺⢕⢟⢮⢊⢢⢱⢄⠃⣇⣞⢞⣞⢾\n" +
+          "⢀⠢⡑⡀⢂⢊⠠⠁⡂⡐⠀⠅⡈⠪⠪⠪⠣⠫⠑⡁⢔⠕⣜⣜⢦⡰⡎⡯⡾⡽\n" +
+          "```"
+
+        var msg = await channel.send(jerma);
+      }
+    },
+  }),
+  new SlashCommand({
+    definition: {
       name: "remote",
       description: "Sends a given message to the given channel",
       options: [
@@ -75,16 +126,17 @@ export const cmds = [
         },
       ],
     },
-    action: async ({args, guild, channel}) => {
-      console.log("as command");
-      var member = guild.members.cache.get(args.member)!
+    action: async ({ args, guild, channel }) => {
+      var member = guild.members.cache.get(args.member)!;
       if (args.channel) {
         channel = guild.channels.cache.get(args.channel)!;
       }
       if (channel instanceof TextChannel) {
-          var webhook = await channel.createWebhook(member.displayName, {avatar: member.user.avatarURL({dynamic:true}) ?? undefined})
-          await webhook.send(args.message)
-          webhook.delete()
+        var webhook = await channel.createWebhook(member.displayName, {
+          avatar: member.user.avatarURL({ dynamic: true }) ?? undefined,
+        });
+        await webhook.send(args.message);
+        webhook.delete();
       }
     },
   }),
