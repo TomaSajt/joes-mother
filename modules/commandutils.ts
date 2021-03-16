@@ -1,4 +1,4 @@
-import Discord, { APIMessage, Snowflake, TextChannel } from 'discord.js'
+import Discord, { APIMessage, Guild, GuildChannel, GuildMember, Snowflake, TextChannel } from 'discord.js'
 import { Interaction, Definition, InteractionResponse } from './discord_type_extension'
 import * as SlashUtils from './slash_utils'
 
@@ -71,7 +71,10 @@ type SlashCommandActionArgs = {
     client: Discord.Client,
     interaction: Interaction,
     sch: SlashCommandHandler,
-    args: any
+    args: any,
+    guild: Guild,
+    channel: GuildChannel,
+    member: GuildMember
 }
 
 export class CombinedHandler {
@@ -217,8 +220,10 @@ export class SlashCommandHandler {
                             }
                         }
                         console.log(args);
-                        
-                        cmd.action({ client: this.client, interaction, sch: this, args })
+                        var guild = this.client.guilds.cache.get(interaction.guild_id!)!
+                        var channel = guild?.channels.cache.get(interaction.channel_id!)!
+                        var member = interaction.member!
+                        cmd.action({ client: this.client, interaction, sch: this, args, guild, channel, member })
                         /*SlashUtils.respondToInteraction(this.client, interaction, {
                             type: 4,
                             data: {
@@ -277,11 +282,11 @@ export class IncludesCommand extends Command {
 }
 
 export class IncludesReactCommand extends IncludesCommand {
-    constructor(args: IncludesReactCommandArgs) {
+    constructor({names, emoji}: IncludesReactCommandArgs) {
         super({
-            names: args.names,
+            names,
             action: ({ message }) => {
-                message.react(args.emoji)
+                message.react(emoji)
             },
             botExecutable: true
         })
