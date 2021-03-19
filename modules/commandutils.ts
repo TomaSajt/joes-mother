@@ -2,21 +2,21 @@ import Discord, { APIMessage, Guild, GuildChannel, GuildMember, Snowflake, TextC
 import { Interaction, Definition, InteractionResponse } from './discord_type_extension'
 import * as SlashUtils from './slash_utils'
 
-type CombinedHandlerArgs = {
+export type CombinedHandlerArgs = {
     client: Discord.Client,
     admins?: string[],
     prefixCommandHandlerArgs: PrefixCommandHandlerArgs
     includesCommandHandlerArgs: IncludesCommandHandlerArgs
     slashCommandHandlerArgs: SlashCommandHandlerArgs
 }
-type PrefixCommandHandlerArgs = {
+export type PrefixCommandHandlerArgs = {
     prefix: string,
     commands: PrefixCommand[]
 }
-type IncludesCommandHandlerArgs = {
+export type IncludesCommandHandlerArgs = {
     commands: IncludesCommand[]
 }
-type SlashCommandHandlerArgs = {
+export type SlashCommandHandlerArgs = {
     globalCommands: SlashCommand[]
     guildsCommands: {
         guild_id: Snowflake
@@ -24,50 +24,50 @@ type SlashCommandHandlerArgs = {
     }[]
 }
 
-type CommandArgs = {
+export type CommandArgs = {
     adminOnly?: boolean,
     bypassPause?: boolean,
     botExecutable?: boolean,
 }
-type PrefixCommandArgs = {
+export type PrefixCommandArgs = {
     adminOnly?: boolean,
     bypassPause?: boolean,
     botExecutable?: boolean,
     names: string[],
     action: (args: PrefixCommandActionArgs) => void
 }
-type IncludesCommandArgs = {
+export type IncludesCommandArgs = {
     adminOnly?: boolean,
     bypassPause?: boolean,
     botExecutable?: boolean,
     names: string[],
     action: (args: IncludesCommandActionArgs) => void
 }
-type IncludesReactCommandArgs = {
+export type IncludesReactCommandArgs = {
     names: string[],
     emoji: Discord.EmojiIdentifierResolvable
 }
-type SlashCommandArgs = {
+export type SlashCommandArgs = {
     adminOnly?: boolean,
     bypassPause?: boolean,
     definition: Definition,
     action: (args: SlashCommandActionArgs) => void
 }
 
-type PrefixCommandActionArgs = {
+export type PrefixCommandActionArgs = {
     client: Discord.Client,
     message: Discord.Message,
     pch: PrefixCommandHandler,
     name: string,
     args: string[]
 }
-type IncludesCommandActionArgs = {
+export type IncludesCommandActionArgs = {
     client: Discord.Client,
     message: Discord.Message,
     ich: IncludesCommandHandler,
     name: string
 }
-type SlashCommandActionArgs = {
+export type SlashCommandActionArgs = {
     client: Discord.Client,
     interaction: Interaction,
     sch: SlashCommandHandler,
