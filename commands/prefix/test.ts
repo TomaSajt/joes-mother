@@ -36,4 +36,5 @@ export default new PrefixCommand({
         .setFooter("Some footer text here", "https://i.imgur.com/wSTFkRM.png");
       message.channel.send(embed);
     },
+    description: 'command for testing'
   })

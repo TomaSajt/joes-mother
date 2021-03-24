@@ -17,6 +17,7 @@ export default new PrefixCommand({
       }
       
     },
+    description: 'calls eval() on the code-blocks in the arguements'
   })
 
   function evalCodeBlock(toEval:string, {args,client,message,name,pch}:PrefixCommandActionArgs) {

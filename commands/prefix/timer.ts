@@ -37,6 +37,7 @@ export default new PrefixCommand({
       }
       
     },
+     description: 'starts a timer, then proceeds to get the bot rate-limited'
   })
 
   async function* countdownGenerator(n: number) {

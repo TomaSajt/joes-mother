@@ -2,7 +2,7 @@ import { TextChannel } from "discord.js";
 import { SlashCommand } from "../../modules/commandutils";
 
 export default new SlashCommand({
-  adminOnly: true,
+  adminOnly: false,
   definition: {
     name: "as",
     description: "Sends a message in the name of a person",

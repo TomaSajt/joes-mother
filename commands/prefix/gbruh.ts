@@ -4,6 +4,7 @@ export default new PrefixCommand({
   names: ["gbruh"],
   bypassPause: false,
   adminOnly: true,
+  hidden: true,
   action: async ({ message, args }) => {
     var json = await gbSearch(args, 3);
     var str = json
@@ -11,6 +12,7 @@ export default new PrefixCommand({
       .reduce((allRows, nextRow) => allRows + "\n" + nextRow);
     message.channel.send(str);
   },
+  description:':)'
 });
 
 async function gbSearch(

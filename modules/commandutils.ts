@@ -28,18 +28,14 @@ export type CommandArgs = {
     adminOnly?: boolean,
     bypassPause?: boolean,
     botExecutable?: boolean,
+    description?: string,
+    hidden?: boolean
 }
-export type PrefixCommandArgs = {
-    adminOnly?: boolean,
-    bypassPause?: boolean,
-    botExecutable?: boolean,
+export type PrefixCommandArgs = CommandArgs & {
     names: string[],
     action: (args: PrefixCommandActionArgs) => void
 }
-export type IncludesCommandArgs = {
-    adminOnly?: boolean,
-    bypassPause?: boolean,
-    botExecutable?: boolean,
+export type IncludesCommandArgs = CommandArgs & {
     names: string[],
     action: (args: IncludesCommandActionArgs) => void
 }
@@ -47,9 +43,7 @@ export type IncludesReactCommandArgs = {
     names: string[],
     emoji: Discord.EmojiIdentifierResolvable
 }
-export type SlashCommandArgs = {
-    adminOnly?: boolean,
-    bypassPause?: boolean,
+export type SlashCommandArgs = CommandArgs & {
     definition: Definition,
     action: (args: SlashCommandActionArgs) => void
 }
@@ -97,8 +91,8 @@ export class CombinedHandler {
 }
 
 export class PrefixCommandHandler {
-    private commands: PrefixCommand[]
-    private client: Discord.Client
+    readonly commands: PrefixCommand[]
+    readonly client: Discord.Client
     readonly prefix: string
     readonly handler: CombinedHandler
 
@@ -141,8 +135,8 @@ export class PrefixCommandHandler {
 }
 
 export class IncludesCommandHandler {
-    private commands: IncludesCommand[]
-    private client: Discord.Client
+    readonly commands: IncludesCommand[]
+    readonly client: Discord.Client
     readonly handler: CombinedHandler
 
     constructor(client: Discord.Client, handler: CombinedHandler, { commands }: IncludesCommandHandlerArgs) {
@@ -177,28 +171,30 @@ export class IncludesCommandHandler {
 }
 
 export class SlashCommandHandler {
-    private commands: SlashCommand[]
-    private client: Discord.Client
+    readonly commands: SlashCommand[]
+    readonly client: Discord.Client
     readonly handler: CombinedHandler
 
     constructor(client: Discord.Client, handler: CombinedHandler, { globalCommands, guildsCommands }: SlashCommandHandlerArgs) {
         this.client = client
         this.handler = handler
         this.commands = []
+        for (const guildCommands of guildsCommands) {
+            this.commands = this.commands.concat(guildCommands.commands)
+        }
         const register = async () => {
             console.log('Started registering guild slash commands')
             for (const guildCommands of guildsCommands) {
-                this.commands = this.commands.concat(guildCommands.commands)
                 await SlashUtils.registerGuildCommands(client, guildCommands.commands, guildCommands.guild_id)
             }
             console.log('Done registering guild slash commands')
-
-            //@ts-ignore
-            client.ws.on('INTERACTION_CREATE', interaction => {
-                this.handleInteraction(interaction as Interaction);
-            })
         }
         register()
+
+        //@ts-ignore
+        client.ws.on('INTERACTION_CREATE', interaction => {
+            this.handleInteraction(interaction as Interaction);
+        })
 
     }
 
@@ -251,10 +247,15 @@ export abstract class Command {
     readonly adminOnly: boolean
     readonly bypassPause: boolean
     readonly botExecutable: boolean
-    constructor({ adminOnly = false, botExecutable = false, bypassPause = false }: CommandArgs) {
+    readonly description?: string
+    readonly hidden?: boolean
+
+    constructor({ adminOnly = false, botExecutable = false, bypassPause = false, description, hidden = false }: CommandArgs) {
         this.adminOnly = adminOnly;
         this.bypassPause = bypassPause;
         this.botExecutable = botExecutable;
+        this.description = description
+        this.hidden = hidden
     }
 }
 
@@ -262,8 +263,8 @@ export class PrefixCommand extends Command {
     readonly names: string[]
     readonly action: (args: PrefixCommandActionArgs) => void
 
-    constructor({ action, names, adminOnly, botExecutable, bypassPause }: PrefixCommandArgs) {
-        super({ adminOnly, bypassPause, botExecutable })
+    constructor({ action, names, adminOnly, botExecutable, bypassPause, description, hidden }: PrefixCommandArgs) {
+        super({ adminOnly, bypassPause, botExecutable, description, hidden })
         this.names = names;
         this.action = action;
     }
@@ -273,15 +274,15 @@ export class IncludesCommand extends Command {
     readonly names: string[]
     readonly action: (args: IncludesCommandActionArgs) => void
 
-    constructor({ action, names, adminOnly, botExecutable, bypassPause }: IncludesCommandArgs) {
-        super({ adminOnly, bypassPause, botExecutable })
+    constructor({ action, names, adminOnly, botExecutable, bypassPause, description, hidden }: IncludesCommandArgs) {
+        super({ adminOnly, bypassPause, botExecutable, description, hidden })
         this.names = names;
         this.action = action;
     }
 }
 
 export class IncludesReactCommand extends IncludesCommand {
-    constructor({names, emoji}: IncludesReactCommandArgs) {
+    constructor({ names, emoji }: IncludesReactCommandArgs) {
         super({
             names,
             action: ({ message }) => {
@@ -296,8 +297,8 @@ export class SlashCommand extends Command {
     readonly action: (args: SlashCommandActionArgs) => void
     readonly definition: Definition
 
-    constructor({ action, definition, adminOnly, bypassPause }: SlashCommandArgs) {
-        super({ adminOnly, bypassPause, botExecutable: false })
+    constructor({ action, definition, adminOnly, bypassPause, botExecutable, description, hidden }: SlashCommandArgs) {
+        super({ adminOnly, bypassPause, botExecutable, description, hidden })
         this.action = action;
         this.definition = definition;
     }

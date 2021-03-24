@@ -57,65 +57,66 @@ export default new SlashCommand({
     ],
   },
   action: ({ args, channel, member, client }) => {
-    var embed = new MessageEmbed()
-      .setColor("#0099ff")
-      .setTitle("Quiz")
-      .setAuthor(
-        member.displayName,
-        member.user.avatar ?? undefined
-      )
-      .addFields(
-        { name: args.question, value: "\u200B" },
-        { name: "\u200B", value: "\u200B" },
-        {
-          name: "Option 1",
-          value: args.option_1,
-          inline: true,
-        },
-        {
-          name: "Option 2",
-          value: args.option_2,
-          inline: true,
-        }
-      )
+    // var embed = new MessageEmbed()
+    //   .setColor("#0099ff")
+    //   .setTitle("Quiz")
+    //   .setAuthor(
+    //     member.displayName,
+    //     member.user.avatarURL({dynamic:true}) ?? undefined
+    //   )
+    //   .addFields(
+    //     { name: args.question, value: "\u200B" },
+    //     { name: "\u200B", value: "\u200B" },
+    //     {
+    //       name: "Option 1",
+    //       value: args.option_1,
+    //       inline: true,
+    //     },
+    //     {
+    //       name: "Option 2",
+    //       value: args.option_2,
+    //       inline: true,
+    //     }
+    //   )
 
-    if (args.option_3) {
-      embed = embed.addFields(
-        {
-          name: "Option 3",
-          value: args.option_3,
-          inline: true,
-        }
-      )
-      if (args.option_4) {
-        embed = embed.addFields(
-          {
-            name: "Option 4",
-            value: args.option_4,
-            inline: true,
-          }
-        )
-        if (args.option_5) {
-          embed = embed.addFields(
-            {
-              name: "Option 5",
-              value: args.option_5,
-              inline: true,
-            }
-          )
-          if (args.option_6) {
-            embed = embed.addFields(
-              {
-                name: "Option 6",
-                value: args.option_6,
-                inline: true,
-              }
-            )
-          }
-        }
-      }
-    }
-    embed = embed.setTimestamp().setFooter("JMB quiz", client.user?.avatar ?? undefined);
-    channel.send(embed);
+    // if (args.option_3) {
+    //   embed = embed.addFields(
+    //     {
+    //       name: "Option 3",
+    //       value: args.option_3,
+    //       inline: true,
+    //     }
+    //   )
+    //   if (args.option_4) {
+    //     embed = embed.addFields(
+    //       {
+    //         name: "Option 4",
+    //         value: args.option_4,
+    //         inline: true,
+    //       }
+    //     )
+    //     if (args.option_5) {
+    //       embed = embed.addFields(
+    //         {
+    //           name: "Option 5",
+    //           value: args.option_5,
+    //           inline: true,
+    //         }
+    //       )
+    //       if (args.option_6) {
+    //         embed = embed.addFields(
+    //           {
+    //             name: "Option 6",
+    //             value: args.option_6,
+    //             inline: true,
+    //           }
+    //         )
+    //       }
+    //     }
+    //   }
+    // }
+    // console.log('asd')
+    // embed = embed.setTimestamp().setFooter("JMB quiz", client.user?.avatarURL({dynamic:true}) ?? undefined);
+    channel.send('asd');
   },
 })

@@ -18,6 +18,7 @@ export default new PrefixCommand({
 
         }
     },
+    description: 'Lets you draw on a personal canvas'
 });
 
 function init(message: Message, args: string[]) {

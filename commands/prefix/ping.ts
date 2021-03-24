@@ -9,4 +9,5 @@ export default new PrefixCommand({
         }ms. API Latency is ${Math.round(client.ws.ping)}ms`
       );
     },
+    description: 'Pong!'
   })

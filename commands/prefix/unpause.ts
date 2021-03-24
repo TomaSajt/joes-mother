@@ -10,4 +10,5 @@ export default new PrefixCommand({
         message.channel.send("Unpaused the handler.");
       }
     },
+    description: 'unpauses the instance of the bot, that recieved it'
   })
