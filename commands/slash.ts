@@ -5,7 +5,8 @@ export default Promise.all(
   fs
     .readdirSync(path.join(__dirname, "slash"))
     .map(
-      async (file) =>
-        (await import("./slash/" + file)).default as SlashCommand
+      async (file) => {
+        console.log(file)
+        return (await import("./slash/" + file)).default as SlashCommand}
     )
 );
