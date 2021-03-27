@@ -1,10 +1,9 @@
 import { PrefixCommand } from "../../modules/commandutils";
-import { Canvas, createCanvas } from "canvas";
+import { Canvas, createCanvas, loadImage } from "canvas";
 import { GuildMember, Message, MessageAttachment } from "discord.js";
 
 var canvasMap = new Map<GuildMember, Canvas>();
 
-var canvas: Canvas;
 export default new PrefixCommand({
     names: ["draw"],
     action: ({ message, args }) => {

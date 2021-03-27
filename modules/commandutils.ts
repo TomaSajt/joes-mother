@@ -219,25 +219,36 @@ export class SlashCommandHandler {
 
 
             var args: any = {}
-            var argsOptions: ApplicationCommandInteractionDataOption[]
+            var argsOptions: ApplicationCommandInteractionDataOption[] | undefined
             var subcommand: string | undefined
             var subcommandgroup: string | undefined
-            switch (interaction.data.options![0].type) {
-                case 2:
-                    argsOptions = interaction.data.options![0].options![0].options!
-                    subcommand = interaction.data.options![0].options![0].name
-                    subcommandgroup = interaction.data.options![0].name
-                    break;
-                case 1:
-                    argsOptions = interaction.data.options![0].options!
-                    subcommand = interaction.data.options![0].name
-                    break;
-                default:
-                    argsOptions = interaction.data.options!
-                    break;
+            if (interaction.data.options) {
+                switch (interaction.data.options[0].type) {
+                    case 2:
+                        if (interaction.data.options[0].options) {
+                            if (interaction.data.options[0].options[0].options) {
+                                argsOptions = interaction.data.options[0].options[0].options
+                            }
+                            subcommand = interaction.data.options[0].options[0].name
+                        }
+                        subcommandgroup = interaction.data.options[0].name
+                        break;
+                    case 1:
+                        if (interaction.data.options[0].options) {
+                            argsOptions = interaction.data.options[0].options
+                        }
+                        subcommand = interaction.data.options[0].name
+                        break;
+                    default:
+                        argsOptions = interaction.data.options
+                        break;
+                }
             }
-            for (const option of argsOptions) {
-                args[option.name] = option.value
+
+            if (argsOptions) {
+                for (const option of argsOptions) {
+                    args[option.name] = option.value
+                }
             }
             console.log(`${interaction?.data?.name} ${subcommandgroup} ${subcommand}`.yellow)
             console.log(args);
