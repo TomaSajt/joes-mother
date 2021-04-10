@@ -25,5 +25,8 @@ export default new SlashCommand({
       embed = embed.addField(key, value != '' && value ? value : '\u200B')
     }
     channel.send(embed)
+    if (json.lat && json.lon) {
+      channel.send(`https://www.google.com/maps/@${json.lat},${json.lon},15z`)
+    }
   },
 })
