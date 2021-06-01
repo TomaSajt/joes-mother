@@ -49,7 +49,7 @@ export type IncludesReactCommandArgs = {
 }
 export type SlashCommandArgs = CommandArgs & {
     definition: Definition,
-    action: (args: SlashCommandActionArgs) => void
+    action: (args: SlashCommandActionArgs) => Promise<InteractionResponse | void>
 }
 
 export type PrefixCommandActionArgs = {
@@ -258,11 +258,13 @@ export class SlashCommandHandler {
             var channel = guild.channels.cache.get(interaction.channel_id!)!
             var member = await guild.members.fetch(interaction.member?.user.id!)!
             if (channel instanceof TextChannel) {
-                cmd.action({ client: this.client, interaction, sch: this, args, guild, channel, member, subcommand, subcommandgroup })
+                var response = (await cmd.action({ client: this.client, interaction, sch: this, args, guild, channel, member, subcommand, subcommandgroup }) ?? { type: 2 }) as InteractionResponse
+                SlashUtils.respondToInteraction(this.client, interaction, response)
+            } else {
+                SlashUtils.respondToInteraction(this.client, interaction, {
+                    type: 2
+                })
             }
-            SlashUtils.respondToInteraction(this.client, interaction, {
-                type: 2
-            })
 
 
 
@@ -330,7 +332,7 @@ export class IncludesReactCommand extends IncludesCommand {
 }
 
 export class SlashCommand extends Command {
-    readonly action: (args: SlashCommandActionArgs) => void
+    readonly action: (args: SlashCommandActionArgs) => Promise<InteractionResponse | void>
     readonly definition: Definition
 
     constructor({ action, definition, adminOnly, bypassPause, botExecutable, hidden }: SlashCommandArgs) {

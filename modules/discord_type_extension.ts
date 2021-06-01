@@ -61,6 +61,7 @@ export type InteractionApplicationCommandCallbackData = {
   embeds?: MessageEmbed;
   allowed_mentions?: AllowedMentions;
   flags?: number;
+  components?: Component[]
 };
 
 export type AllowedMentions = {
@@ -69,3 +70,14 @@ export type AllowedMentions = {
   users: Snowflake[];
   replied_user: boolean;
 };
+
+export type Component = {
+  type: 1 | 2
+  style?: number
+  label?: string
+  emoji?: { name?: string, id?: Snowflake, animated?: boolean }
+  custom_id?: string
+  url?: string
+  disabled?: boolean
+  components?: Component[]
+}
