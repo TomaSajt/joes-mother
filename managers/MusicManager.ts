@@ -16,29 +16,27 @@ class MusicManger {
     }
 
     play(guild: Guild, member: GuildMember, textChannel: TextChannel, searchTerm: string) {
-        this.getGuildMusicManager(guild)
+        this.getGuildMusicManager(guild).play(member, textChannel, searchTerm)
     }
 
 }
 class GuildMusicManager {
+    queue: Song[] = []
+    play(member: GuildMember, textChannel: TextChannel, searchTerm: string) {
 
+    }
 }
-export const Music = new MusicManger()
+export default new MusicManger()
 
 
 export type Song = {
     name: string
     url: string
-    getStream: (...args: any[]) => Promise<Readable>
-}
-export function GetSong(url: string): Song {
-    return {
-        name: "Unkown title",
-        url,
-        getStream: async () => await ytdl(url)
-    }
 }
 
-function getURL(term: string) {
-    search(term, {maxResults:1, key:process.env.YOUTUBE_API_KEY})
+export async function getURL(term: string) {
+    var regex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
+
+    var data = await search(term, {type: 'video', maxResults:1, key:process.env.YOUTUBE_API_KEY, regionCode:'US'}).then(res => res.results[0])
+    return data.link
 }

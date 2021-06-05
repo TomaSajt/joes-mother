@@ -1,6 +1,6 @@
 import { PrefixCommand } from "../../modules/commandutils";
 import { GuildChannel, TextChannel, VoiceConnection } from "discord.js";
-import { GetSong, Music } from '../../managers/MusicManager'
+import Music, { getURL } from '../../managers/MusicManager'
 
 export default new PrefixCommand({
     names: ["music"],
@@ -9,11 +9,14 @@ export default new PrefixCommand({
     action: async ({ args, message, client }) => {
         if (!message.member) return
         if (!(message.channel instanceof TextChannel)) return
+        var keyword = args.shift()
 
-        switch (args[0]) {
+        switch (keyword) {
             case 'join':
+                
                 break;
             case 'play':
+                message.channel.send(`First video when searched: ${await getURL(args.join(' '))}`)
                 break;
             case 'leave':
                 break;
