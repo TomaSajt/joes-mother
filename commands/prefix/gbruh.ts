@@ -20,7 +20,7 @@ async function gbSearch(
   limit: number
 ): Promise<{ file_url: string }[]> {
   var response = await fetch(
-    `${process.env.GBLINK}limit=${limit}&tags=${searchTerms.join("+")}`
+    `${process.env.GB_LINK}limit=${limit}&tags=${searchTerms.join("+")}`
   );
   return await response.json();
 }

@@ -12,12 +12,8 @@ export default new PrefixCommand({
 
         switch (args[0]) {
             case 'join':
-                if (!message.member.voice.channel) break
-                await Music.getGuildMusicManager(message.guild!).joinChannel(message.member.voice.channel)
                 break;
-
             case 'play':
-                Music.getGuildMusicManager(message.guild!).addQueueTryPlay(GetSong(args[1]), message.channel)
                 break;
             case 'leave':
                 break;

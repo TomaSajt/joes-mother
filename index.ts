@@ -3,7 +3,7 @@ import { CombinedHandler, CommandLoader, IncludesCommand, PrefixCommand, SlashCo
 import * as config from './config.json'
 const client = new Discord.Client({ ws: { intents: new Discord.Intents(Discord.Intents.ALL) } })
 require('dotenv').config()
-client.login(process.env.TOKEN)
+client.login(process.env.DISCORD_TOKEN)
 
 
 
