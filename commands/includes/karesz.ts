@@ -1,4 +1,4 @@
-import { IncludesReactCommand } from "../../modules/commandutils";
+import { IncludesReactCommand } from "@tomasajt/cmd";
 
 export default new IncludesReactCommand({
     names: ['karesz'],

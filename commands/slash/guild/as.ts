@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js";
-import { SlashCommand } from "../../../modules/commandutils";
+import { SlashCommand } from "@tomasajt/cmd";
 
 export default new SlashCommand({
   adminOnly: false,

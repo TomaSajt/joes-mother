@@ -1,4 +1,4 @@
-import { PrefixCommand } from "../../modules/commandutils";
+import { PrefixCommand } from "@tomasajt/cmd";
 
 var timerDone = true
 export default new PrefixCommand({

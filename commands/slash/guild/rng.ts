@@ -1,9 +1,6 @@
-import { Message } from "discord.js";
-import { TextChannel } from "discord.js";
-import fetch from "node-fetch";
-import { SlashCommand } from "../../../modules/commandutils";
-import { Interaction } from "../../../modules/discord_type_extension";
-import { patchInteraction, respondToInteraction } from "../../../modules/interaction_utils";
+import { SlashCommand } from "@tomasajt/cmd";
+import { Interaction } from "@tomasajt/cmd/lib/discord_type_extensions";
+import { patchInteraction, respondToInteraction } from "@tomasajt/cmd/lib/interaction_utils";
 
 export default new SlashCommand({
   adminOnly: false,
@@ -44,7 +41,7 @@ export default new SlashCommand({
 
       client.ws.removeListener('INTERACTION_CREATE', onButtonClicked)
 
-    }, secondsToTimeout*1000)
+    }, secondsToTimeout * 1000)
 
     //@ts-ignore
     client.ws.on('INTERACTION_CREATE', onButtonClicked)

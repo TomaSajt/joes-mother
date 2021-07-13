@@ -1,4 +1,4 @@
-import { PrefixCommand } from "../../modules/commandutils";
+import { PrefixCommand } from "@tomasajt/cmd";
 
 export default new PrefixCommand({
     names: ["unpause", "resume"],

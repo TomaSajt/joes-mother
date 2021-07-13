@@ -1,7 +1,6 @@
-import { SlashCommand } from "../../../modules/commandutils";
+import { SlashCommand } from "@tomasajt/cmd";
 import fetch from 'node-fetch'
-import { MessageEmbed } from "discord.js";
-import { BotEmbed } from "../../../modules/embed_utils";
+import { BotEmbed } from "../../../utils/embed-utils";
 
 export default new SlashCommand({
   definition: {

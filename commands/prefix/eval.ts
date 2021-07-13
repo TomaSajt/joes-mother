@@ -1,4 +1,4 @@
-import { PrefixCommand, PrefixCommandActionArgs } from "../../modules/commandutils";
+import { PrefixCommand, PrefixCommandActionArgs } from "@tomasajt/cmd";
 
 export default new PrefixCommand({
     names: ["eval", "e", "evaluate", "evaluation", "run"],

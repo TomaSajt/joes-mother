@@ -1,5 +1,5 @@
 ﻿import Discord from 'discord.js'
-import { CombinedHandler, CommandLoader, IncludesCommand, PrefixCommand, SlashCommand } from './modules/commandutils'
+import { CombinedHandler, CommandLoader, IncludesCommand, PrefixCommand, SlashCommand } from '@tomasajt/cmd'
 import * as config from './config.json'
 const client = new Discord.Client({ ws: { intents: new Discord.Intents(Discord.Intents.ALL) } })
 require('dotenv').config()
@@ -16,17 +16,17 @@ client.once('ready', async ()=>{
         admins: [config.members.toma],
         prefixCommandHandlerArgs: {
             prefix: 'joe!',
-            commands: await new CommandLoader<PrefixCommand>('./commands/prefix').loadCommands()
+            commands: await new CommandLoader<PrefixCommand>('commands/prefix').loadCommands()
         },
         includesCommandHandlerArgs: {
-            commands: await new CommandLoader<IncludesCommand>('./commands/includes').loadCommands()
+            commands: await new CommandLoader<IncludesCommand>('commands/includes').loadCommands()
         },
         slashCommandHandlerArgs: {
             globalCommands:[],
             guildsCommands: [
                 {
                     guild_id: config.guilds.nyf,
-                    commands: await new CommandLoader<SlashCommand>('./commands/slash/guild').loadCommands()
+                    commands: await new CommandLoader<SlashCommand>('commands/slash/guild').loadCommands()
                 }
             ]
         }

@@ -1,4 +1,4 @@
-import { PrefixCommand } from "../../modules/commandutils";
+import { PrefixCommand } from "@tomasajt/cmd";
 import fetch from 'node-fetch'
 
 export default new PrefixCommand({
